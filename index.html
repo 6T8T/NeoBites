@@ -2,49 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smartphone HUD</title>
   <style>
-    html, body {
+    body {
+      background: #222;
       margin: 0;
-      padding: 0;
-      background: transparent;
-      height: 100%;
-      font-family: 'Arial', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+      height: 100vh;
+      font-family: Arial, sans-serif;
     }
-
     .phone {
-      background: rgba(51, 51, 51, 0.75);
-      width: 90vw;
-      max-width: 340px;
-      height: 90vh;
-      max-height: 640px;
+      background: #333;
+      width: 300px;
+      height: 600px;
       border-radius: 30px;
       padding: 20px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-sizing: border-box;
     }
-
     .app-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      margin-top: auto;
-      margin-bottom: auto;
-      width: 100%;
+      margin-top: 40px;
     }
-
     .app {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      background: rgba(85, 85, 85, 0.9);
+      width: 60px;
+      height: 60px;
+      background: #555;
       border-radius: 15px;
       display: flex;
       align-items: center;
@@ -53,12 +42,10 @@
       text-align: center;
       font-size: 12px;
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
+      transition: background 0.3s;
     }
-
     .app:hover {
-      background: rgba(119, 119, 119, 0.9);
-      transform: scale(1.05);
+      background: #777;
     }
   </style>
 </head>
@@ -68,4 +55,16 @@
       <div class="app" onclick="openApp('profile')">Profile</div>
       <div class="app" onclick="openApp('map')">Map</div>
       <div class="app" onclick="openApp('music')">Music</div>
-      <div class="app" onclick="openAp
+      <div class="app" onclick="openApp('messages')">Messages</div>
+      <div class="app" onclick="openApp('inventory')">Inventory</div>
+      <div class="app" onclick="openApp('settings')">Settings</div>
+    </div>
+  </div>
+
+  <script>
+    function openApp(appName) {
+      window.location.href = "secondlife:///app/chat/APP_CLICKED_" + appName;
+    }
+  </script>
+</body>
+</html>
