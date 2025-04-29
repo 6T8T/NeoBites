@@ -72,7 +72,15 @@
 
   <script>
     function openApp(appName) {
-      window.location.href = "secondlife:///app/chat/APP_CLICKED_" + appName;
+	if ( appName === 'profile' )
+	{
+		window.location.href = "secondlife:///app/profile/self/about";
+	}
+	else
+	{
+		window.location.href = "secondlife:///app/chat/APP_CLICKED_" + appName;
+	}
+      
     }
   </script>
 </body>
