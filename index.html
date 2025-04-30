@@ -136,7 +136,17 @@
     </div>
 
     <div class="conversations-screen" id="conversationsScreen">
-      <div class="back-button" onclick="showScreen('appGrid')">← Back</div>
+  <div class="back-button" onclick="showScreen('appGrid')">← Back</div>
+  <div class="app-grid">
+    <div class="app" onclick="openApp('profile')">Profile</div>
+    <div class="app" onclick="openApp('map')">Map</div>
+    <div class="app" onclick="openApp('music')">Music</div>
+    <div class="app" onclick="openApp('messages')">Messages</div>
+    <div class="app" onclick="openApp('inventory')">Inventory</div>
+    <div class="app" onclick="openApp('settings')">Settings</div>
+  </div>
+  <div class="conversation-list" id="conversationList">Loading...</div>
+</div>
       <div class="conversation-list" id="conversationList">Loading...</div>
     </div>
 
