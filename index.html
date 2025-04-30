@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smartphone HUD</title>
   <style>
     body {
@@ -24,6 +25,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow: hidden;
+    }
+
+    .app-grid, .conversations-screen, .thread-screen {
+      width: 100%;
+      flex-grow: 1;
+      display: none;
     }
 
     .app-grid {
@@ -47,20 +55,70 @@
       cursor: pointer;
       transition: all 0.3s ease;
       backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
 
     .app:hover {
       background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px) scale(1.05);
+      transform: scale(1.05);
+    }
+
+    .conversation-list, .chat-log {
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      border-radius: 10px;
+      color: white;
+      font-size: 12px;
+      height: 100%;
+    }
+
+    .conversation-entry {
+      padding: 10px;
+      margin-bottom: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .message-form {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .message-form input {
+      flex-grow: 1;
+      padding: 6px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .message-form button {
+      padding: 6px 10px;
+      background: #555;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .back-button {
+      font-size: 12px;
+      color: #aaa;
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
+
+    .back-button:hover {
+      color: white;
     }
   </style>
 </head>
 <body>
   <div class="phone">
-    <div class="app-grid">
+    <div class="app-grid" id="appGrid">
       <div class="app" onclick="openApp('profile')">Profile</div>
       <div class="app" onclick="openApp('map')">Map</div>
       <div class="app" onclick="openApp('music')">Music</div>
@@ -68,19 +126,91 @@
       <div class="app" onclick="openApp('inventory')">Inventory</div>
       <div class="app" onclick="openApp('settings')">Settings</div>
     </div>
+
+    <div class="conversations-screen" id="conversationsScreen">
+      <div class="back-button" onclick="showScreen('appGrid')">← Back</div>
+      <div class="conversation-list" id="conversationList">Loading...</div>
+    </div>
+
+    <div class="thread-screen" id="threadScreen">
+      <div class="back-button" onclick="showScreen('conversationsScreen')">← Back to conversations</div>
+      <div class="chat-log" id="chatLog"></div>
+      <form class="message-form" onsubmit="sendMessage(event)">
+        <input type="text" id="senderInput" placeholder="You" required />
+        <input type="text" id="messageInput" placeholder="Message" required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
   </div>
 
   <script>
+    const API_URL = "https://tranquil-link-messaging-api.I-6T8T.repl.co";
+    let currentRecipient = "";
+
+    function showScreen(screenId) {
+      document.querySelectorAll(".app-grid, .conversations-screen, .thread-screen")
+        .forEach(div => div.style.display = "none");
+      document.getElementById(screenId).style.display = "flex";
+    }
+
     function openApp(appName) {
-	if ( appName === 'profile' )
-	{
-		window.location.href = "secondlife:///app/openfloater/profile";
-	}
-	else
-	{
-		window.location.href = "secondlife:///app/chat/APP_CLICKED_" + appName;
-	}
-      
+      if (appName === "messages") {
+        showScreen("conversationsScreen");
+        loadConversations();
+      } else if (appName === "profile") {
+        window.location.href = "secondlife:///app/profile/self/about";
+      }
+    }
+
+    async function loadConversations() {
+      const res = await fetch(`${API_URL}/messages`);
+      const data = await res.json();
+
+      const threads = {};
+      data.forEach(msg => {
+        const other = msg.sender === msg.recipient ? msg.sender : msg.sender === senderInput.value ? msg.recipient : msg.sender;
+        threads[other] = msg;
+      });
+
+      const list = document.getElementById("conversationList");
+      list.innerHTML = "";
+      Object.keys(threads).forEach(name => {
+        const div = document.createElement("div");
+        div.className = "conversation-entry";
+        div.textContent = name;
+        div.onclick = () => openThread(name);
+        list.appendChild(div);
+      });
+    }
+
+    async function openThread(recipient) {
+      currentRecipient = recipient;
+      showScreen("threadScreen");
+
+      const res = await fetch(`${API_URL}/messages`);
+      const data = await res.json();
+      const chat = data.filter(m =>
+        (m.sender === senderInput.value && m.recipient === recipient) ||
+        (m.sender === recipient && m.recipient === senderInput.value)
+      );
+
+      const log = document.getElementById("chatLog");
+      log.innerHTML = chat.map(m => `<div><b>${m.sender}:</b> ${m.message}</div>`).join("");
+    }
+
+    async function sendMessage(event) {
+      event.preventDefault();
+      const sender = document.getElementById("senderInput").value;
+      const message = document.getElementById("messageInput").value;
+
+      await fetch(`${API_URL}/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sender, recipient: currentRecipient, message })
+      });
+
+      document.getElementById("messageInput").value = "";
+      openThread(currentRecipient);
     }
   </script>
 </body>
