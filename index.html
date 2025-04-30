@@ -33,14 +33,19 @@
       height: 100%;
       display: none;
       flex-direction: column;
+      justify-content: space-between;
     }
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      padding-top: 40px;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 16px;
+      align-content: center;
+      justify-items: center;
       box-sizing: border-box;
+      padding-top: 20px;
+      padding-bottom: 20px;
     }
 
     .app {
