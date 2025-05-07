@@ -88,6 +88,7 @@
       margin: 30px;
       box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
       text-align: center;
+      position: relative;
     }
 
     .details-page img {
@@ -110,18 +111,17 @@
     }
 
     .details-page .button-row {
-      margin-top: 20px;
+      margin-top: 40px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       gap: 12px;
     }
 
     .button-row button {
-      flex: 1;
       background: rgba(0, 255, 255, 0.1);
       color: #fff;
       border: 1px solid #00ffff;
-      padding: 10px;
+      padding: 10px 16px;
       border-radius: 8px;
       cursor: pointer;
       transition: background 0.3s;
@@ -129,6 +129,35 @@
 
     .button-row button:hover {
       background: rgba(0, 255, 255, 0.2);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: #a0faff;
+      cursor: pointer;
+    }
+
+    table.nutrition {
+      margin: 16px auto;
+      border-collapse: collapse;
+      width: 90%;
+    }
+
+    .nutrition th, .nutrition td {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .nutrition th {
+      background-color: rgba(0, 255, 255, 0.1);
+      color: #a0faff;
     }
 
     .cart {
@@ -171,15 +200,20 @@
   </section>
 
   <section class="details-page" id="details">
-    <img src="https://via.placeholder.com/600x240/0af/fff?text=Plasma+Rolls" alt="Plasma Rolls" />
+    <button class="back-button" onclick="goBack()">←</button>
+    <img src="https://images.unsplash.com/photo-1584270354949-1a17a2e1ed77?auto=format&fit=crop&w=800&q=80" alt="Plasma Rolls" />
     <h2>Plasma Rolls</h2>
     <p><strong>Description:</strong> Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
-    <p><strong>Calories:</strong> 420 kcal</p>
-    <p><strong>Nutritional Facts:</strong> 12g protein, 20g fat, 40g carbs</p>
+    <table class="nutrition">
+      <tr><th>Nutrient</th><th>Amount</th></tr>
+      <tr><td>Calories</td><td>420 kcal</td></tr>
+      <tr><td>Protein</td><td>12g</td></tr>
+      <tr><td>Fat</td><td>20g</td></tr>
+      <tr><td>Carbohydrates</td><td>40g</td></tr>
+    </table>
     <p><strong>Allergens:</strong> Contains sesame, soy, and wheat</p>
     <p><strong>Pregnancy Safe:</strong> ✅ Yes – All ingredients are pasteurized and pregnancy-safe</p>
     <div class="button-row">
-      <button onclick="goBack()">← Back to Menu</button>
       <button onclick="addToCart()">Add to Cart</button>
     </div>
   </section>
