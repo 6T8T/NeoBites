@@ -203,7 +203,7 @@
     <button class="back-button" onclick="goBack()">←</button>
     <img src="https://images.unsplash.com/photo-1584270354949-1a17a2e1ed77?auto=format&fit=crop&w=800&q=80" alt="Plasma Rolls" />
     <h2>Plasma Rolls</h2>
-    <p><strong>Description:</strong> Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
+    <p>Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
     <table class="nutrition">
       <tr><th>Nutrient</th><th>Amount</th></tr>
       <tr><td>Calories</td><td>420 kcal</td></tr>
@@ -212,8 +212,11 @@
       <tr><td>Carbohydrates</td><td>40g</td></tr>
     </table>
     <p><strong>Allergens:</strong> Contains sesame, soy, and wheat</p>
-    <p><strong>Pregnancy Safe:</strong> ✅ Yes – All ingredients are pasteurized and pregnancy-safe</p>
+    
     <div class="button-row">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span id="pregnancyLabel" style="font-variant: small-caps; font-size: 0.8rem; display: flex; align-items: center;"></span>
+      </div>
       <button onclick="addToCart()">Add to Cart</button>
     </div>
   </section>
@@ -223,9 +226,20 @@
   </div>
 
   <script>
+    const isPregnancySafe = true; // change to false for unsafe items
+
     function showDetails() {
       document.getElementById("menu").style.display = "none";
       document.getElementById("details").style.display = "block";
+
+      const label = document.getElementById("pregnancyLabel");
+      if (isPregnancySafe) {
+        label.innerHTML = '✅ Pregnancy Safe';
+        label.style.color = '#00ff88';
+      } else {
+        label.innerHTML = '🚫 Not Pregnancy Safe';
+        label.style.color = '#ff4c4c';
+      }
     }
 
     function goBack() {
