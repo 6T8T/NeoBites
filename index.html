@@ -81,23 +81,54 @@
     .details-page {
       display: none;
       max-width: 600px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 20px;
-      margin: 20px;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 30px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      text-align: center;
+    }
+
+    .details-page img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
     }
 
     .details-page h2 {
-      margin-top: 0;
       color: #a0faff;
     }
 
     .details-page p {
       font-size: 0.95rem;
-      line-height: 1.5;
+      line-height: 1.6;
       margin: 8px 0;
+    }
+
+    .details-page .button-row {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .button-row button {
+      flex: 1;
+      background: rgba(0, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid #00ffff;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .button-row button:hover {
+      background: rgba(0, 255, 255, 0.2);
     }
 
     .cart {
@@ -140,12 +171,17 @@
   </section>
 
   <section class="details-page" id="details">
+    <img src="https://via.placeholder.com/600x240/0af/fff?text=Plasma+Rolls" alt="Plasma Rolls" />
     <h2>Plasma Rolls</h2>
     <p><strong>Description:</strong> Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
     <p><strong>Calories:</strong> 420 kcal</p>
     <p><strong>Nutritional Facts:</strong> 12g protein, 20g fat, 40g carbs</p>
     <p><strong>Allergens:</strong> Contains sesame, soy, and wheat</p>
     <p><strong>Pregnancy Safe:</strong> ✅ Yes – All ingredients are pasteurized and pregnancy-safe</p>
+    <div class="button-row">
+      <button onclick="goBack()">← Back to Menu</button>
+      <button onclick="addToCart()">Add to Cart</button>
+    </div>
   </section>
 
   <div class="cart">
@@ -156,6 +192,15 @@
     function showDetails() {
       document.getElementById("menu").style.display = "none";
       document.getElementById("details").style.display = "block";
+    }
+
+    function goBack() {
+      document.getElementById("details").style.display = "none";
+      document.getElementById("menu").style.display = "grid";
+    }
+
+    function addToCart() {
+      alert("Plasma Rolls added to cart!");
     }
   </script>
 </body>
