@@ -42,6 +42,11 @@
       pointer-events: none; /* make sure it doesn't interfere */
     }
 
+    .custom-cursor {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
     body::before {
       content: "";
       position: fixed;
@@ -55,7 +60,7 @@
       z-index: -1;
       opacity: 0.4;
     }
-    
+
 
     body {
       margin: 0;
@@ -105,7 +110,7 @@
       gap: 30px;
       padding: 40px;
     }
-    
+
 
     .item {
       width: 180px;
@@ -204,6 +209,12 @@
       transition: background 0.3s;
     }
 
+    button:hover ~ .custom-cursor,
+    .item:hover ~ .custom-cursor,
+    a:hover ~ .custom-cursor {
+      opacity: 1;
+    }
+    
     .button-row button:hover {
       background: rgba(0, 255, 255, 0.2);
     }
@@ -259,7 +270,7 @@
   </header>
 
   <section class="menu" id="menu"></section>
-
+  <div class="custom-cursor" id="customCursor"></div>
   <div id="heroText" class="hero">
     <p>Experience food ordering in the digital age<br><br>—<br><br>sleek, ambient, and futuristic.</p>
   </div>
@@ -268,7 +279,7 @@
   <img src="https://images.pexels.com/photos/271715/pexels-photo-271715.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" alt="Plasma Rolls" style="width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);" />
   <button onclick="goBack()" style="position: absolute; top: 10px; left: 10px; background: transparent; border: none; font-size: 2rem; color: white; cursor: pointer;">&times;</button>
 </div>
-  
+
     <h2>Plasma Rolls</h2>
     <p>Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
     <table class="nutrition">
@@ -280,7 +291,7 @@
     </table>
 
     <p id="allergensInfo" style="font-size: 0.85rem; color: #a0faff; font-style: italic;"></p>
-    
+
     <div class="button-row" style="flex-direction: column; align-items: center;">
   <span id="pregnancyLabel" style="font-variant: small-caps; font-size: 0.8rem; display: flex; align-items: center; margin-bottom: 10px;"></span>
     <button onclick="addToCart('Plasma Rolls')">Add to Cart</button>
@@ -339,7 +350,7 @@
     }
 
     let cart = [];
-    
+
     function addToCart(itemName) {
   const existingItem = cart.find(i => i.name === itemName);
 
@@ -440,7 +451,7 @@ function setToMax() {
     const starCtx = starCanvas.getContext("2d");
 
     const spaceBackground = new Image();
-    spaceBackground.src = 'https://images.pexels.com/photos/1819650/pexels-photo-1819650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; // replace with any HD space image
+    spaceBackground.src = 'Background Image.png'; // replace with any HD space image
 
 
     let stars = [];
@@ -451,8 +462,6 @@ function setToMax() {
     function resizeStarCanvas() {
       starCanvas.width = window.innerWidth;
       starCanvas.height = window.innerHeight;
-      centerX = window.innerWidth / 2;
-      centerY = window.innerHeight / 2;
     }
     resizeStarCanvas();
     window.addEventListener("resize", resizeStarCanvas);
@@ -470,11 +479,49 @@ function setToMax() {
     }
     createStars();
 
+    let angle = 0;
+    const radius = 40; // Wider loop = larger radius
+
+    let targetOffsetX = 0, targetOffsetY = 0;
+    let currentOffsetX = 0, currentOffsetY = 0;
+    let mouseX = 0, mouseY = 0;
+
+    document.addEventListener("mousemove", (e) => {
+      const rect = starCanvas.getBoundingClientRect();
+      mouseX = (e.clientX - rect.width / 2) / (rect.width / 2);  // range -1 to 1
+      mouseY = (e.clientY - rect.height / 2) / (rect.height / 2);
+    });
+
     function drawStars() {
-      starCtx.drawImage(spaceBackground, 0, 0, starCanvas.width, starCanvas.height);
+      const extraMargin = 100; // amount the background image exceeds canvas edges
+  const bgWidth = starCanvas.width + extraMargin * 2;
+  const bgHeight = starCanvas.height + extraMargin * 2;
+
+  // Calculate normalized mouse offset (-1 to 1)
+  const distance = Math.sqrt(mouseX ** 2 + mouseY ** 2);
+  const easeSpeed = 0.01 + (0.04 * distance);
+
+  // Target offset: limit to the extra margin
+  targetOffsetX = -mouseX * extraMargin;
+  targetOffsetY = -mouseY * extraMargin;
+
+  // Smoothly ease to target
+  currentOffsetX += (targetOffsetX - currentOffsetX) * easeSpeed;
+  currentOffsetY += (targetOffsetY - currentOffsetY) * easeSpeed;
+
+  // Clear canvas and draw image with buffer
+  starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+  starCtx.drawImage(
+    spaceBackground,
+    -extraMargin + currentOffsetX,
+    -extraMargin + currentOffsetY,
+    bgWidth,
+    bgHeight
+  );
 
 
-      for (let i = 0; i < STAR_COUNT; i++) {
+      // Draw twinkling stars on top
+      for (let i = 0; i < stars.length; i++) {
         const star = stars[i];
         star.z -= 4;
 
@@ -492,14 +539,23 @@ function setToMax() {
           const size = (1 - star.z / starCanvas.width) * 3;
           starCtx.beginPath();
           starCtx.arc(px, py, size, 0, Math.PI * 2);
-          starCtx.fillStyle = `rgba(255, 255, 255, ${star.o})`;
+          starCtx.fillStyle = `rgba(0, 255, 255, ${star.o})`;
           starCtx.fill();
         }
       }
 
       requestAnimationFrame(drawStars);
     }
-    drawStars();
+
+
+
+
+
+    
+    
+    spaceBackground.onload = () => {
+      drawStars();
+    };
 
     // Circuit Web canvas
     const fxCanvas = document.getElementById("backgroundFX");
@@ -558,10 +614,9 @@ function setToMax() {
 
     window.addEventListener("resize", resizeAll);
     resizeAll();
-    drawStars();
     drawCircuitPulse();
 
-      
+
   </script>
 
   <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
@@ -593,6 +648,24 @@ function setToMax() {
   <script>
     document.addEventListener("DOMContentLoaded", generateMenu);
   </script>
+
+  <script>
+    document.body.style.cursor = 'none';
+    const cursor = document.getElementById('customCursor');
+
+    // Move cursor with mouse
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Show cursor only on interactables
+    document.addEventListener('mouseover', (e) => {
+      const isInteractive = e.target.closest('button, a, .item, input, .cart');
+      cursor.style.opacity = isInteractive ? '1' : '0';
+    });
+  </script>
+
 
 
 </body>
