@@ -78,6 +78,28 @@
       color: #eee;
     }
 
+    .details-page {
+      display: none;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    }
+
+    .details-page h2 {
+      margin-top: 0;
+      color: #a0faff;
+    }
+
+    .details-page p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 8px 0;
+    }
+
     .cart {
       position: fixed;
       bottom: 20px;
@@ -98,8 +120,8 @@
     <p class="hero">Experience food ordering in the digital age — sleek, ambient, and futuristic.</p>
   </header>
 
-  <section class="menu">
-    <div class="item">
+  <section class="menu" id="menu">
+    <div class="item" onclick="showDetails()">
       <h3>Plasma Rolls</h3>
       <p>Infused with electric spice and holographic sesame glaze.</p>
     </div>
@@ -117,8 +139,24 @@
     </div>
   </section>
 
+  <section class="details-page" id="details">
+    <h2>Plasma Rolls</h2>
+    <p><strong>Description:</strong> Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
+    <p><strong>Calories:</strong> 420 kcal</p>
+    <p><strong>Nutritional Facts:</strong> 12g protein, 20g fat, 40g carbs</p>
+    <p><strong>Allergens:</strong> Contains sesame, soy, and wheat</p>
+    <p><strong>Pregnancy Safe:</strong> ✅ Yes – All ingredients are pasteurized and pregnancy-safe</p>
+  </section>
+
   <div class="cart">
     🛒 Floating Cart: 2 items
   </div>
+
+  <script>
+    function showDetails() {
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("details").style.display = "block";
+    }
+  </script>
 </body>
 </html>
