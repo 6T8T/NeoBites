@@ -151,20 +151,21 @@
     }
 
     .details-page {
-  display: none;
-  width: 100%;
-  max-width: 560px;         /* Makes it look tighter and more polished */
-  min-height: 520px;        /* Keeps height consistent */
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 24px;
-  margin: 30px auto;        /* Centers the panel horizontally */
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-  text-align: center;
-  position: relative;
-  box-sizing: border-box;
-}
+      display: none;
+      width: 100%;
+      max-width: 560px;         /* Makes it look tighter and more polished */
+      min-height: 520px;        /* Keeps height consistent */
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 30px auto;        /* Centers the panel horizontally */
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+      cursor: default;
+    }
 
     .details-page img {
       width: 100%;
@@ -199,6 +200,7 @@
       max-width: 100%;
     }
 
+
     .button-row button {
       background: rgba(0, 255, 255, 0.1);
       color: #fff;
@@ -211,10 +213,16 @@
 
     button:hover ~ .custom-cursor,
     .item:hover ~ .custom-cursor,
-    a:hover ~ .custom-cursor {
+    a:hover ~ .custom-cursor,
+    .details-page:hover ~ .custom-cursor,
+    #cartCountDisplay:hover ~ .custom-cursor,
+    .button-row:hover ~ .custom-cursor,
+    .cart:hover ~ .custom-cursor {
       opacity: 1;
     }
-    
+
+
+
     .button-row button:hover {
       background: rgba(0, 255, 255, 0.2);
     }
@@ -259,6 +267,7 @@
       box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
       color: #fff;
       font-size: 0.9rem;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -280,19 +289,19 @@
   <button onclick="goBack()" style="position: absolute; top: 10px; left: 10px; background: transparent; border: none; font-size: 2rem; color: white; cursor: pointer;">&times;</button>
 </div>
 
-    <h2>Plasma Rolls</h2>
-    <p>Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
-    <table class="nutrition">
-      <tr><th>Nutrient</th><th>Amount</th></tr>
-      <tr><td>Calories</td><td>420 kcal</td></tr>
-      <tr><td>Protein</td><td>12g</td></tr>
-      <tr><td>Fat</td><td>20g</td></tr>
-      <tr><td>Carbohydrates</td><td>40g</td></tr>
-    </table>
+      <h2>Plasma Rolls</h2>
+      <p>Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
+      <table class="nutrition">
+        <tr><th>Nutrient</th><th>Amount</th></tr>
+        <tr><td>Calories</td><td>420 kcal</td></tr>
+        <tr><td>Protein</td><td>12g</td></tr>
+        <tr><td>Fat</td><td>20g</td></tr>
+        <tr><td>Carbohydrates</td><td>40g</td></tr>
+      </table>
 
-    <p id="allergensInfo" style="font-size: 0.85rem; color: #a0faff; font-style: italic;"></p>
+      <p id="allergensInfo" style="font-size: 0.85rem; color: #a0faff; font-style: italic;"></p>
 
-    <div class="button-row" style="flex-direction: column; align-items: center;">
+      <div class="button-row" style="flex-direction: column; align-items: center;">
   <span id="pregnancyLabel" style="font-variant: small-caps; font-size: 0.8rem; display: flex; align-items: center; margin-bottom: 10px;"></span>
     <button onclick="addToCart('Plasma Rolls')">Add to Cart</button>
 </div>
@@ -625,20 +634,20 @@ function setToMax() {
 
       <h3 style="margin-bottom: 30px; font-size: 1.3rem; color: #a0faff;">Adjust Quantity</h3>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem;">
-        <span id="sliderMinValue" style="color: #a0faff;">0</span>
-        <input id="removeSlider" type="range" min="0" max="1" value="1"
-               style="width: 70%; appearance: none; height: 6px; border-radius: 5px; background: rgba(0, 255, 255, 0.3); outline: none;">
-        <span id="sliderMaxValue" style="color: #a0faff;">1</span>
-      </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem;">
+          <span id="sliderMinValue" style="color: #a0faff;">0</span>
+          <input id="removeSlider" type="range" min="0" max="1" value="1"
+                 style="width: 70%; appearance: none; height: 6px; border-radius: 5px; background: rgba(0, 255, 255, 0.3); outline: none;">
+          <span id="sliderMaxValue" style="color: #a0faff;">1</span>
+        </div>
 
-      <div id="sliderValue" style="margin-top: 10px; margin-bottom: 30px; font-size: 1rem; color: #a0faff; font-weight: bold;">0</div>
+        <div id="sliderValue" style="margin-top: 10px; margin-bottom: 30px; font-size: 1rem; color: #a0faff; font-weight: bold;">0</div>
 
-      <div style="display: flex; justify-content: center; gap: 12px;">
-        <button onclick="confirmRemove()" style="background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer;">Confirm</button>
-        <button onclick="setToMax()" style="background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer;">Max</button>
+        <div style="display: flex; justify-content: center; gap: 12px;">
+          <button onclick="confirmRemove()" style="background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer;">Confirm</button>
+          <button onclick="setToMax()" style="background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer;">Max</button>
+        </div>
       </div>
-    </div>
   </div>
 
   <!-- Load your menu logic -->
