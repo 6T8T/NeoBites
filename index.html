@@ -251,11 +251,14 @@
     }
 
     function addToCart() {
-  const item = {
-    name: "Plasma Rolls",
-    quantity: 1
-  };
-  cart.push(item);
+  const itemName = "Plasma Rolls";
+  const existingItem = cart.find(i => i.name === itemName);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({ name: itemName, quantity: 1 });
+  }
   renderCart();
 }
 
@@ -265,7 +268,7 @@
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
         <div>
           <strong>${item.name}</strong><br>
-          <input type="number" value="${item.quantity}" min="1" style="width: 50px; margin-top: 5px;">
+          <div style="display: flex; justify-content: flex-end; align-items: center;"><span style="font-size: 0.8rem; color: #ccc; margin-right: 12px;">QUANTITY</span><input type="number" value="${item.quantity}" min="1" style="width: 60px; background: rgba(0, 255, 255, 0.05); color: #a0faff; border: 1px solid #00ffff; border-radius: 6px; padding: 4px; text-align: center; font-weight: bold; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></div>
         </div>
         <button onclick="removeFromCart(${index})" style="background: none; border: none; color: #ff4c4c; font-size: 1.2rem; cursor: pointer;">&times;</button>
       </div>
