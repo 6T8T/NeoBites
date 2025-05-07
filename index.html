@@ -111,6 +111,7 @@
       width: 180px;
       height: 180px;
       border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05); /* faint glassy glow */
       background-size: cover;
       background-position: center;
       display: flex;
@@ -126,35 +127,6 @@
       box-shadow: inset 0 0 10px rgba(0,255,255,0.2), 0 0 20px rgba(0,255,255,0.3);
       transition: transform 0.3s, box-shadow 0.3s;
     }
-    
-    .plasma-rolls {
-      background-image: url('https://images.pexels.com/photos/271715/pexels-photo-271715.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
-      background-size: cover;
-      background-position: center;
-      color: white;
-    }
-
-    .nova-curry {
-      background-image: url('https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260'); /* example */
-      background-size: cover;
-      background-position: center;
-      color: white;
-    }
-
-    .cyber-tacos {
-      background-image: url('https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260'); /* example */
-      background-size: cover;
-      background-position: center;
-      color: white;
-    }
-
-    .quantum-shake {
-      background-image: url('https://images.pexels.com/photos/161887/pexels-photo-161887.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260'); /* example */
-      background-size: cover;
-      background-position: center;
-      color: white;
-    }
-
 
     .item:hover {
       transform: translateY(-6px);
@@ -174,17 +146,20 @@
     }
 
     .details-page {
-      display: none;
-      max-width: 600px;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 24px;
-      margin: 30px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-      text-align: center;
-      position: relative;
-    }
+  display: none;
+  width: 100%;
+  max-width: 560px;         /* Makes it look tighter and more polished */
+  min-height: 520px;        /* Keeps height consistent */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 24px;
+  margin: 30px auto;        /* Centers the panel horizontally */
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+}
 
     .details-page img {
       width: 100%;
@@ -212,13 +187,12 @@
       gap: 12px;
     }
 
-    button {
-      border-radius: 50%;
-      width: 64px;
-      height: 64px;
-      padding: 0;
+    .details-page p,
+    .details-page h2,
+    .details-page table,
+    .details-page .button-row {
+      max-width: 100%;
     }
-
 
     .button-row button {
       background: rgba(0, 255, 255, 0.1);
@@ -284,25 +258,7 @@
     <h1>NeoBites</h1>
   </header>
 
-  <section class="menu" id="menu">
-  <div class="item plasma-rolls" onclick="showDetails()">
-    <h3>Plasma Rolls</h3>
-    <p>Infused with electric spice and holographic sesame glaze.</p>
-  </div>
-  <div class="item nova-curry">
-    <h3>Nova Curry Bowl</h3>
-    <p>A rich galactic blend of spice, starlight rice, and chroma greens.</p>
-  </div>
-  <div class="item cyber-tacos">
-    <h3>Cyber Tacos</h3>
-    <p>Tri-shell tacos with neon aioli and programmable protein.</p>
-  </div>
-  <div class="item quantum-shake">
-    <h3>Quantum Shake</h3>
-    <p>Vanilla, quantum fruit extract, and glow dust swirl.</p>
-    
-  </div>
-</section>
+  <section class="menu" id="menu"></section>
 
   <div id="heroText" class="hero">
     <p>Experience food ordering in the digital age<br><br>—<br><br>sleek, ambient, and futuristic.</p>
@@ -322,11 +278,12 @@
       <tr><td>Fat</td><td>20g</td></tr>
       <tr><td>Carbohydrates</td><td>40g</td></tr>
     </table>
-    <p><strong>Allergens:</strong> Contains sesame, soy, and wheat</p>
+
+    <p id="allergensInfo" style="font-size: 0.85rem; color: #a0faff; font-style: italic;"></p>
     
     <div class="button-row" style="flex-direction: column; align-items: center;">
   <span id="pregnancyLabel" style="font-variant: small-caps; font-size: 0.8rem; display: flex; align-items: center; margin-bottom: 10px;"></span>
-  <button onclick="addToCart()">Add to Cart</button>
+    <button onclick="addToCart('Plasma Rolls')">Add to Cart</button>
 </div>
 </div>
     </div>
@@ -346,15 +303,34 @@
       sidebar.style.right = isOpen ? "-350px" : "0px";
     }
 
-    function showDetails() {
+    function showDetails(index) {
+      const item = menuItems[index];
+
       document.getElementById("menu").style.display = "none";
-      document.getElementById("heroText").style.display = "none"; // HIDE hero text
+      document.getElementById("heroText").style.display = "none";
       document.getElementById("details").style.display = "block";
 
       const label = document.getElementById("pregnancyLabel");
-      label.innerHTML = isPregnancySafe ? '✅ Pregnancy Safe' : '🚫 Not Pregnancy Safe';
-      label.style.color = isPregnancySafe ? '#00ff88' : '#ff4c4c';
+      label.innerHTML = item.pregnancySafe ? '✅ Pregnancy Safe' : '🚫 Not Pregnancy Safe';
+      label.style.color = item.pregnancySafe ? '#00ff88' : '#ff4c4c';
+
+      document.querySelector(".details-page h2").textContent = item.name;
+      document.querySelector(".details-page p").textContent = item.description;
+      document.querySelector(".details-page img").src = item.image;
+      document.querySelector(".details-page img").alt = item.name;
+
+      document.querySelector(".nutrition").innerHTML = `
+        <tr><th>Nutrient</th><th>Amount</th></tr>
+        <tr><td>Calories</td><td>${item.calories} kcal</td></tr>
+        <tr><td>Protein</td><td>${item.protein}</td></tr>
+        <tr><td>Fat</td><td>${item.fat}</td></tr>
+        <tr><td>Carbohydrates</td><td>${item.carbs}</td></tr>
+      `;
+
+      document.getElementById("allergensInfo").textContent = item.allergens;
+      document.querySelector(".button-row button").setAttribute("onclick", `addToCart('${item.name}')`);
     }
+
 
     function goBack() {
       document.getElementById("details").style.display = "none";
@@ -362,8 +338,9 @@
       document.getElementById("heroText").style.display = "block"; // SHOW hero text again
     }
 
-    function addToCart() {
-  const itemName = "Plasma Rolls";
+    let cart = [];
+    
+    function addToCart(itemName) {
   const existingItem = cart.find(i => i.name === itemName);
 
   if (existingItem) {
@@ -457,48 +434,72 @@ function setToMax() {
   <div id="cartItems"></div>
 </div>
 
-  
   <script>
     // Starfield canvas
     const starCanvas = document.getElementById("starfield");
     const starCtx = starCanvas.getContext("2d");
 
+    const spaceBackground = new Image();
+    spaceBackground.src = 'https://images.pexels.com/photos/1819650/pexels-photo-1819650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; // replace with any HD space image
+
+
+    let stars = [];
+    const STAR_COUNT = 800;
+    let centerX = window.innerWidth / 2;
+    let centerY = window.innerHeight / 2;
+
     function resizeStarCanvas() {
       starCanvas.width = window.innerWidth;
       starCanvas.height = window.innerHeight;
+      centerX = window.innerWidth / 2;
+      centerY = window.innerHeight / 2;
     }
-
-    let stars = [];
-    const STAR_COUNT = 150;
+    resizeStarCanvas();
+    window.addEventListener("resize", resizeStarCanvas);
 
     function createStars() {
       stars = [];
       for (let i = 0; i < STAR_COUNT; i++) {
         stars.push({
-          x: Math.random() * starCanvas.width,
-          y: Math.random() * starCanvas.height,
-          radius: Math.random() * 1.5 + 0.5,
-          velocity: Math.random() * 0.15 + 0.05,
-          opacity: Math.random(),
-          direction: Math.random() > 0.5 ? 1 : -1,
+          x: (Math.random() - 0.5) * starCanvas.width,
+          y: (Math.random() - 0.5) * starCanvas.height,
+          z: Math.random() * starCanvas.width,
+          o: Math.random() * 0.5 + 0.5,
         });
       }
     }
+    createStars();
 
     function drawStars() {
-      starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-      for (let star of stars) {
-        starCtx.beginPath();
-        starCtx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-        starCtx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-        starCtx.fill();
-        star.opacity += star.direction * 0.01;
-        if (star.opacity >= 1 || star.opacity <= 0) star.direction *= -1;
-        star.y += star.velocity;
-        if (star.y > starCanvas.height) star.y = 0;
+      starCtx.drawImage(spaceBackground, 0, 0, starCanvas.width, starCanvas.height);
+
+
+      for (let i = 0; i < STAR_COUNT; i++) {
+        const star = stars[i];
+        star.z -= 4;
+
+        if (star.z <= 0) {
+          star.x = (Math.random() - 0.5) * starCanvas.width;
+          star.y = (Math.random() - 0.5) * starCanvas.height;
+          star.z = starCanvas.width;
+        }
+
+        const k = 128 / star.z;
+        const px = star.x * k + centerX;
+        const py = star.y * k + centerY;
+
+        if (px >= 0 && px <= starCanvas.width && py >= 0 && py <= starCanvas.height) {
+          const size = (1 - star.z / starCanvas.width) * 3;
+          starCtx.beginPath();
+          starCtx.arc(px, py, size, 0, Math.PI * 2);
+          starCtx.fillStyle = `rgba(255, 255, 255, ${star.o})`;
+          starCtx.fill();
+        }
       }
+
       requestAnimationFrame(drawStars);
     }
+    drawStars();
 
     // Circuit Web canvas
     const fxCanvas = document.getElementById("backgroundFX");
@@ -559,6 +560,8 @@ function setToMax() {
     resizeAll();
     drawStars();
     drawCircuitPulse();
+
+      
   </script>
 
   <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
@@ -582,6 +585,14 @@ function setToMax() {
       </div>
     </div>
   </div>
+
+  <!-- Load your menu logic -->
+  <script src="menu.js"></script>
+
+  <!-- Call generateMenu AFTER it’s defined -->
+  <script>
+    document.addEventListener("DOMContentLoaded", generateMenu);
+  </script>
 
 
 </body>
