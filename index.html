@@ -277,5 +277,26 @@
     renderCart();
   }
 </script>
+<div id="cartSidebar" style="position: fixed; top: 0; right: -350px; width: 300px; height: 100%; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); box-shadow: -4px 0 15px rgba(0, 255, 255, 0.2); color: white; padding: 20px; transition: right 0.3s ease; overflow-y: auto; z-index: 9999;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <h3 style="margin: 0; color: #a0faff;">Your Cart</h3>
+    <button onclick="toggleCart()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+  </div>
+  <div id="cartItems"></div>
+</div>
+
+<script>
+  const cartSidebar = document.getElementById("cartSidebar");
+  const cartButton = document.querySelector(".cart");
+  let cartOpen = false;
+  const cart = [];
+
+  cartButton.addEventListener("click", toggleCart);
+
+  function toggleCart() {
+    cartOpen = !cartOpen;
+    cartSidebar.style.right = cartOpen ? "0" : "-350px";
+  }
+</script>
 </body>
 </html>
