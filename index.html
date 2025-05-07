@@ -3,236 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smartphone HUD</title>
+  <title>NeoBite | Futuristic Food Ordering</title>
   <style>
     body {
-      background: #222;
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-
-    .phone {
-      background: #333;
-      width: 300px;
-      height: 600px;
-      border-radius: 30px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow: hidden;
     }
 
-    .app-grid, .conversations-screen, .thread-screen {
+    header {
       width: 100%;
-      height: 100%;
-      display: none;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .app-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 16px;
-      align-content: center;
-      justify-items: center;
-      box-sizing: border-box;
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
-
-    .app {
-      width: 60px;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+      padding: 40px 20px 20px;
       text-align: center;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    }
-
-    .app:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
-    }
-
-    .conversation-list, .chat-log {
-      flex-grow: 1;
-      overflow-y: auto;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 10px;
-      border-radius: 10px;
-      color: white;
-      font-size: 12px;
-      box-sizing: border-box;
-    }
-
-    .conversation-entry {
-      padding: 10px;
-      margin-bottom: 5px;
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #a0faff;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    .hero {
+      max-width: 800px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: #c0e8ff;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .item {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
       cursor: pointer;
     }
 
-    .message-form {
-      display: flex;
-      gap: 5px;
-      margin-top: 10px;
+    .item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 25px rgba(0, 255, 255, 0.4);
     }
 
-    .message-form input {
-      flex-grow: 1;
-      padding: 6px;
-      border: none;
-      border-radius: 8px;
+    .item h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      color: #90e0ef;
     }
 
-    .message-form button {
-      padding: 6px 10px;
-      background: #555;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+    .item p {
+      font-size: 0.9rem;
+      color: #eee;
     }
 
-    .back-button {
-      font-size: 12px;
-      color: #aaa;
-      cursor: pointer;
-      margin-bottom: 5px;
-    }
-
-    .back-button:hover {
-      color: white;
+    .cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      color: #fff;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <div class="phone">
-    <div class="app-grid" id="appGrid">
-      <div class="app" onclick="openApp('profile')">Profile</div>
-      <div class="app" onclick="openApp('map')">Map</div>
-      <div class="app" onclick="openApp('music')">Music</div>
-      <div class="app" onclick="openApp('messages')">Messages</div>
-      <div class="app" onclick="openApp('inventory')">Inventory</div>
-      <div class="app" onclick="openApp('settings')">Settings</div>
-    </div>
+  <header>
+    <h1>NeoBite</h1>
+    <p class="hero">Experience food ordering in the digital age — sleek, ambient, and futuristic.</p>
+  </header>
 
-    <div class="conversations-screen" id="conversationsScreen">
-  <div class="back-button" onclick="showScreen('appGrid')">← Back</div>
-  <div class="app-grid">
-    <div class="app" onclick="openApp('profile')">Profile</div>
-    <div class="app" onclick="openApp('map')">Map</div>
-    <div class="app" onclick="openApp('music')">Music</div>
-    <div class="app" onclick="openApp('messages')">Messages</div>
-    <div class="app" onclick="openApp('inventory')">Inventory</div>
-    <div class="app" onclick="openApp('settings')">Settings</div>
+  <section class="menu">
+    <div class="item">
+      <h3>Plasma Rolls</h3>
+      <p>Infused with electric spice and holographic sesame glaze.</p>
+    </div>
+    <div class="item">
+      <h3>Nova Curry Bowl</h3>
+      <p>A rich galactic blend of spice, starlight rice, and chroma greens.</p>
+    </div>
+    <div class="item">
+      <h3>Cyber Tacos</h3>
+      <p>Tri-shell tacos with neon aioli and programmable protein.</p>
+    </div>
+    <div class="item">
+      <h3>Quantum Shake</h3>
+      <p>Vanilla, quantum fruit extract, and glow dust swirl.</p>
+    </div>
+  </section>
+
+  <div class="cart">
+    🛒 Floating Cart: 2 items
   </div>
-  <div class="conversation-list" id="conversationList">Loading...</div>
-</div>
-      <div class="conversation-list" id="conversationList">Loading...</div>
-    </div>
-
-    <div class="thread-screen" id="threadScreen">
-      <div class="back-button" onclick="showScreen('conversationsScreen')">← Back to conversations</div>
-      <div class="chat-log" id="chatLog"></div>
-      <form class="message-form" onsubmit="sendMessage(event)">
-        <input type="text" id="senderInput" placeholder="You" required />
-        <input type="text" id="messageInput" placeholder="Message" required />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    const API_URL = "https://tranquil-link.I-6T8T.repl.co";
-    let currentRecipient = "";
-
-    function showScreen(screenId) {
-      document.querySelectorAll(".app-grid, .conversations-screen, .thread-screen")
-        .forEach(div => {
-          div.style.display = "none";
-          div.style.flexDirection = "column";
-        });
-      document.getElementById(screenId).style.display = "flex";
-    }
-
-    function openApp(appName) {
-      if (appName === "messages") {
-        showScreen("conversationsScreen");
-        loadConversations();
-      } else if (appName === "profile") {
-        window.location.href = "secondlife:///app/openfloater/self/profile";
-      }
-    }
-
-    async function loadConversations() {
-      const res = await fetch(`${API_URL}/messages`);
-      const data = await res.json();
-
-      const threads = {};
-      data.forEach(msg => {
-        const other = msg.sender === msg.recipient ? msg.sender : msg.sender === senderInput.value ? msg.recipient : msg.sender;
-        threads[other] = msg;
-      });
-
-      const list = document.getElementById("conversationList");
-      list.innerHTML = "";
-      Object.keys(threads).forEach(name => {
-        const div = document.createElement("div");
-        div.className = "conversation-entry";
-        div.textContent = name;
-        div.onclick = () => openThread(name);
-        list.appendChild(div);
-      });
-    }
-
-    async function openThread(recipient) {
-      currentRecipient = recipient;
-      showScreen("threadScreen");
-
-      const res = await fetch(`${API_URL}/messages`);
-      const data = await res.json();
-      const chat = data.filter(m =>
-        (m.sender === senderInput.value && m.recipient === recipient) ||
-        (m.sender === recipient && m.recipient === senderInput.value)
-      );
-
-      const log = document.getElementById("chatLog");
-      log.innerHTML = chat.map(m => `<div><b>${m.sender}:</b> ${m.message}</div>`).join("");
-    }
-
-    async function sendMessage(event) {
-      event.preventDefault();
-      const sender = document.getElementById("senderInput").value;
-      const message = document.getElementById("messageInput").value;
-
-      await fetch(`${API_URL}/send`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sender, recipient: currentRecipient, message })
-      });
-
-      document.getElementById("messageInput").value = "";
-      openThread(currentRecipient);
-    }
-  </script>
 </body>
 </html>
