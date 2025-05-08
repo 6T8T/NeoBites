@@ -189,6 +189,7 @@
 
       .hero {
         padding: 10px 20px 0;
+        margin-bottom: 20px;
         font-size: 0.6rem;
         margin-top: 10px;
         text-align: center;
@@ -199,10 +200,34 @@
         font-size: 0.68rem;
         color: #c0e8ff;
       }
-    
+
+    .chat-wrapper {
+      height: auto;
+      max-height: 95vh;
+      padding-bottom: 0;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .chat-wrapper.zoomed {
+      transform: scale(1.34);
+    }
+
+
+    .chat-header {
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.12);
+      box-shadow: inset 0 -1px 2px rgba(0, 255, 255, 0.05);
+      font-family: 'Orbitron', sans-serif;
+    }
+
     .chat-window {
       max-width: 468px; /* already applied */
-      height: calc(100vh - 100px); /* fix the height */
+      height: calc(100vh - 120px); /* or adjust as needed */
+      max-height: 586px;
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(12px);
       box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
@@ -212,13 +237,6 @@
       overflow: hidden;
     }
 
-    .chat-header {
-      padding: 14px 20px;
-      background: rgba(255, 255, 255, 0.04);
-      border-bottom: 1px solid rgba(0, 255, 255, 0.12);
-      box-shadow: inset 0 -1px 2px rgba(0, 255, 255, 0.05);
-      font-family: 'Orbitron', sans-serif;
-    }
     
     .contact-name {
       color: #a0faff;
@@ -229,6 +247,9 @@
 
 
     .message-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       flex: 1;
       overflow-y: auto;
       padding: 20px;
@@ -237,18 +258,35 @@
     }
 
     .message {
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 8px;
-      background: rgba(0, 255, 255, 0.1);
-      max-width: 70%;
+      position: relative;
+      display: inline-block;
+      margin: 6px 0;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 0.85rem;
+      max-width: 75%;
       word-wrap: break-word;
-      margin-bottom: 0; /* Replace old margin value */
+      line-height: 1.4;
+      background: #e5e5ea;
+      color: black;
     }
 
+    /* Sent messages (you) */
     .message.me {
       background: rgba(0, 200, 200, 0.1);
       margin-left: auto;
+      background: #0b93f6;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* Received messages */
+    .message:not(.me) {
+      background: #e5e5ea;
+      color: black;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
     }
 
     .input-container {
@@ -311,37 +349,34 @@
       <h1>TranquilLink</h1>
     </header>
 
-    <section class="message-container" id="messageContainer">
-        <!-- Messages will be inserted here -->
-    </section>
-
-    <div class="chat-window">
-
-      <div class="status-bar">
-        <div class="status-left">
-          <div class="signal-bars">
-            <span></span><span></span><span></span><span></span>
+    <div class="chat-wrapper">
+      <div class="chat-window">
+        <div class="status-bar">
+          <div class="status-left">
+            <div class="signal-bars">
+              <span></span><span></span><span></span><span></span>
+            </div>
           </div>
-        </div>
-        <div class="status-center">
-          <span class="status-time">12:45</span>
-        </div>
-        <div class="status-right">
-          <div class="battery-icon">
-            <div class="battery-level"></div>
+          <div class="status-center">
+            <span class="status-time">12:45</span>
           </div>
+          <div class="status-right">
+            <div class="battery-icon">
+              <div class="battery-level"></div>
+            </div>
+          </div>
+          </div>
+  
+          <div class="chat-header">
+          <span class="contact-name">Neo • Kai</span>
         </div>
-        </div>
-
-        <div class="chat-header">
-        <span class="contact-name">Neo • Kai</span>
+          <section class="message-container" id="messageContainer"></section>
+          <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+          </div>
       </div>
-        <section class="message-container" id="messageContainer"></section>
-        <div class="input-container">
-          <input type="text" id="messageInput" placeholder="Type your message..." />
-          <button onclick="sendMessage()">Send</button>
-        </div>
-      </div>
+        </div>  
 
     
     <div class="custom-cursor" id="customCursor"></div>
@@ -535,6 +570,15 @@
         window.addEventListener("resize", resizeAll);
         resizeAll();
         drawCircuitPulse();
+
+    let hasZoomed = false;
+    document.querySelector('.chat-wrapper').addEventListener('click', function () {
+      if (!hasZoomed) {
+        this.classList.add('zoomed');
+        hasZoomed = true;
+      }
+    });
+
   </script>
 </body>
 </html>
