@@ -1,13 +1,15 @@
-
 const express = require('express');
 const path = require('path');
 const app = express();
 
-app.use(express.static(__dirname)); // Serve all static files in project root
-
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'TranquilLink.html'));
 });
 
+// Serve static files
+app.use(express.static(path.join(__dirname)));
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
