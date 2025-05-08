@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>NeoMessages | Personal Messaging</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeoMessages | Personal Messaging</title>
@@ -11,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NeoMessages | Personal Messaging</title>
     <style>
       html, body {
         margin: 0;
@@ -185,6 +185,10 @@
         justify-content: space-between;
         flex-direction: column;
         align-items: center;
+
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
       }
 
       .hero {
@@ -209,6 +213,7 @@
       margin-top: 20px;
       display: flex;
       justify-content: center;
+      
     }
 
     .chat-wrapper.zoomed {
@@ -225,7 +230,7 @@
     }
 
     .chat-window {
-      max-width: 468px; /* already applied */
+      max-width: 368px; /* already applied */
       height: calc(100vh - 120px); /* or adjust as needed */
       max-height: 586px;
       background: rgba(255, 255, 255, 0.06);
@@ -260,12 +265,14 @@
     .message {
       position: relative;
       display: inline-block;
-      margin: 6px 0;
-      padding: 10px 14px;
+      margin: 0px 0;
+      padding: 0px 0px;
       border-radius: 18px;
       font-size: 0.85rem;
       max-width: 75%;
-      word-wrap: break-word;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
       line-height: 1.4;
       background: #e5e5ea;
       color: black;
@@ -299,10 +306,62 @@
       align-items: flex-start;
     }
 
+    .message.me .bubble {
+      background: #0b93f6;
+      color: white;
+    }
+
+    .message:not(.me) .bubble {
+      background: #e5e5ea;
+      color: black;
+    }
+
+    .bubble {
+      position: relative;
+      padding: 10px 14px;
+      border-radius: 18px;
+      max-width: 186px;
+      background: rgba(240, 240, 240, 0.95);
+      color: black;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+      font-size: 0.80rem;
+      line-height: 1.4;
+    
+      /* Key additions to handle no-space messages */
+      overflow-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    
+    .message.me .bubble::after {
+      content: "";
+      position: absolute;
+      right: 6px;
+      bottom: 0;
+      width: 12px;
+      height: 16px;
+      background: #0b93f6;
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+
+    .message:not(.me) .bubble::after {
+      content: "";
+      position: absolute;
+      left: -6px;
+      bottom: 0;
+      width: 12px;
+      height: 16px;
+      background: #e5e5ea;
+      clip-path: polygon(100% 100%, 0 0, 0 100%);
+    }
+
+
     .input-container {
       display: flex;
       width: 100%;
       max-width: 800px;        /* Matches .message-container */
+      align-items: center;
       padding: 0 20px 20px;    /* Aligns with message-container padding */
       box-sizing: border-box;
     }
@@ -314,8 +373,14 @@
       text-align: right;
     }
 
+    #messageInput::placeholder {
+      color: rgba(255, 255, 255, 0.9);
+      opacity: 1;
+      text-shadow: 0 0 4px rgba(0, 255, 255, 0.4);
+    }
 
-  .input-container input {
+
+  .input-container textarea {
       flex: 1;
       padding: 10px 14px;
       border: none;
@@ -327,6 +392,10 @@
       backdrop-filter: blur(10px);
       box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
                   inset -2px -2px 5px rgba(0, 255, 255, 0.05);
+
+     resize: none;
+     overflow-y: hidden;
+     line-height: 1.4;
     }
 
 .input-container button {
@@ -389,7 +458,7 @@
         </div>
           <section class="message-container" id="messageContainer"></section>
           <div class="input-container">
-            <input type="text" id="messageInput" placeholder="Type your message..." />
+            <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
             <button onclick="sendMessage()">Send</button>
           </div>
       </div>
@@ -406,6 +475,13 @@
     const messageContainer = document.getElementById('messageContainer');
     const messageInput = document.getElementById('messageInput');
 
+    messageInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
     function sendMessage() {
       const text = messageInput.value.trim();
       if (text) {
@@ -413,7 +489,13 @@
 
         const msg = document.createElement('div');
         msg.className = 'message me';
-        msg.textContent = text;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.textContent = text;
+        
+        msg.appendChild(bubble);
+
 
         const timestamp = document.createElement('div');
         timestamp.className = 'timestamp';
