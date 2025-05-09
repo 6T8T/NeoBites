@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoBites | Futuristic Food Ordering</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Any NeoBites-specific overrides can go here */  /* IE and Edge */
+      scrollbar-width: none !important;     /* Firefox */
+      -webkit-overflow-scrolling: touch !important;
+      -webkit-scrollbar-width: 0 !important;
+      scrollbar-color: transparent transparent !important;
+    }
+
+    html {
+      overflow: hidden !important;
+      width: 100vw !important;
+      height: 100vh !important;
+    }
+
+    /* Chrome, Safari and Opera */
+    *::-webkit-scrollbar,
+    *::-webkit-scrollbar-button,
+    *::-webkit-scrollbar-track,
+    *::-webkit-scrollbar-track-piece,
+    *::-webkit-scrollbar-thumb,
+    *::-webkit-scrollbar-corner,
+    *::-webkit-resizer {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes flashNeon {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.8);
+      }
+    }
+
+    .cart.flash {
+      animation: flashNeon 0.4s ease-in-out;
+    }
+
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1; /* keep it in the back */
+      pointer-events: none; /* make sure it doesn't interfere */
+    }
+
+    .custom-cursor {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .particle-cursor {
+      position: fixed;
+      width: 10px; /* Adjust size as needed */
+      height: 10px; /* Adjust size as needed */
+      border-radius: 50%; /* Make it circular */
+      background: rgba(0, 255, 255, 0.8); /* Light color */
+      pointer-events: none; /* Prevent it from interfering with mouse events */
+      transition: transform 0.1s ease; /* Smooth transition for movement */
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.8); /* Glow effect */
+      z-index: 10000; 
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 255, 255, 0.8); /* Particle color */
+      pointer-events: none;
+    }
+
+    @keyframes xGlow {
+      0%, 100% { 
+        text-shadow: 0 0 10px #ff4c4c;
+        color: #ff4c4c;
+      }
+      50% { 
+        text-shadow: 0 0 20px #ff4c4c, 0 0 30px #ff4c4c;
+        color: #ff8c8c;
+      }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a1f2b);
+      background-size: 400% 400%;
+      animation: gradientFlow 18s ease infinite;
+      z-index: -1;
+      opacity: 0.4;
+    }
+
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+
+
+    header {
+      width: 100%;
+      padding: 40px 20px 20px;
+      text-align: center;
+      background: transparent;
+      backdrop-filter: blur(0px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #a0faff;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    .hero {
+      max-width: 800px;
+      padding: 40px 20px;
+      text-align: center;
+      font-family: 'Major Mono Display', monospace;
+    }
+
+    .hero p {
+      font-size: 0.68rem;
+      color: #c0e8ff;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px;
+    }
+
+
+    .item {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05); /* faint glassy glow */
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 20px;
+      cursor: none;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,255,255,0.4);
+      box-shadow: inset 0 0 10px rgba(0,255,255,0.2), 0 0 20px rgba(0,255,255,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 25px rgba(0, 255, 255, 0.4);
+    }
+
+    .item h3 {
+      font-size: 1rem;
+      margin: 0 0 6px;
+      color: #90e0ef;
+    }
+
+    .item p {
+      font-size: 0.75rem;
+      color: #eee;
+      padding: 0 10px;
+    }
+
+    @keyframes panelGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), 0 0 50px rgba(0, 255, 255, 0.2); }
+    }
+
+    .details-page {
+      display: none;
+      width: 100%;
+      max-width: 560px;
+      height: calc(100vh - 160px);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 24px;
+      margin: -60px auto 0;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+      cursor: none;
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .details-page img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+    }
+
+    .details-page h2 {
+      color: #a0faff;
+    }
+
+    .details-page p {
+      font-size: 0.86rem;
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+
+    .details-page .button-row {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .details-page p,
+    .details-page h2,
+    .details-page table,
+    .details-page .button-row {
+      max-width: 100%;
+    }
+
+
+    .button-row button {
+      background: rgba(0, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid #00ffff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover ~ .custom-cursor,
+    .item:hover ~ .custom-cursor,
+    a:hover ~ .custom-cursor,
+    .details-page:hover ~ .custom-cursor,
+    #cartCountDisplay:hover ~ .custom-cursor,
+    .button-row:hover ~ .custom-cursor,
+    .cart:hover ~ .custom-cursor {
+      opacity: 1;
+    }
+
+
+
+    .button-row button:hover {
+      background: rgba(0, 255, 255, 0.2);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: #a0faff;
+      cursor: pointer;
+    }
+
+    table.nutrition {
+      margin: 16px auto;
+      border-collapse: collapse;
+      width: 90%;
+    }
+
+    .nutrition th, .nutrition td {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .nutrition th {
+      background-color: rgba(0, 255, 255, 0.1);
+      color: #a0faff;
+    }
+
+    .cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      color: #fff;
+      font-size: 0.9rem;
+      cursor: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="backgroundFX"></canvas>
+  <canvas id="starfield"></canvas>
+  <header>
+    <h1>NeoBites</h1>
+  </header>
+
+  <section class="menu" id="menu"></section>
+  <div class="custom-cursor" id="customCursor"></div>
+  <div id="particleCursor" class="particle-cursor"></div>
+  <div id="heroText" class="hero">
+    <p>Experience food ordering in the digital age<br><br>—<br><br>sleek, ambient, and futuristic.</p>
+  </div>
+  <section class="details-page" id="details" style="display: none;">
+  <div style="position: relative;">
+  <img src="https://images.pexels.com/photos/271715/pexels-photo-271715.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" alt="Plasma Rolls" style="width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);" />
+  <button onclick="goBack()" style="position: absolute; top: 10px; right: 10px; background: rgba(0, 255, 255, 0.08); backdrop-filter: blur(8px); border: none; font-size: 1.8rem; color: #00ffff; cursor: none; text-shadow: 0 0 12px #00ffff, 0 0 20px rgba(0,255,255,0.6); transition: all 0.3s; padding: 0px 12px; border-radius: 8px; box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1); line-height: 1;"
+        onmouseover="this.style.color='#fff'; this.style.textShadow='0 0 12px #fff, 0 0 20px rgba(255,255,255,0.6)'; this.style.background='rgba(0, 255, 255, 0.15)';"
+        onmouseout="this.style.color='#00ffff'; this.style.textShadow='0 0 12px #00ffff, 0 0 20px rgba(0,255,255,0.6)'; this.style.background='rgba(0, 255, 255, 0.08)';">×</button>
+</div>
+
+      <h2>Plasma Rolls</h2>
+      <p>Infused with electric spice and a holographic sesame glaze, these rolls are perfect for the bold palate.</p>
+      <table class="nutrition" style="margin-bottom: 10px;">
+        <tr><th>Nutrient</th><th>Amount</th></tr>
+        <tr><td>Calories</td><td>420 kcal</td></tr>
+        <tr><td>Protein</td><td>12g</td></tr>
+        <tr><td>Fat</td><td>20g</td></tr>
+        <tr><td>Carbohydrates</td><td>40g</td></tr>
+      </table>
+
+      <p id="allergensInfo" style="font-size: 0.85rem; color: #a0faff; font-style: italic;margin-top: 15px; margin-bottom: 15px;"></p>
+
+      <div class="button-row" style="flex-direction: column; align-items: center; margin-top: auto; padding-bottom: 12px;">
+        <span id="pregnancyLabel" style="font-variant: small-caps; font-size: 0.8rem; display: flex; align-items: center; margin-bottom: 8px;"></span>
+        <button onclick="addToCart('Plasma Rolls')" style="cursor:none;">Add to Cart</button>
+      </div>
+  </section>
+
+  <div class="cart" id="cartCountDisplay" onclick="toggleCart()">
+  🛒 Floating Cart: 0 items
+</div>
+
+
+  <script>
+    const isPregnancySafe = true; // change to false for unsafe items
+
+    function toggleCart() {
+      const sidebar = document.getElementById("cartSidebar");
+      const isOpen = sidebar.style.right === "0px";
+      sidebar.style.right = isOpen ? "-350px" : "0px";
+    }
+
+    function showDetails(index) {
+      const item = menuItems[index];
+
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("heroText").style.display = "none";
+      document.getElementById("details").style.display = "block";
+
+      // Start flashing X button every 30 seconds
+      const xButton = document.querySelector('#details button');
+      const flashX = () => {
+        xButton.style.textShadow = '0 0 30px #00ffff, 0 0 40px #00ffff';
+        xButton.style.transition = 'text-shadow 0.2s';
+        setTimeout(() => {
+          xButton.style.textShadow = '0 0 12px #00ffff, 0 0 20px rgba(0,255,255,0.6)';
+        }, 200);
+      };
+      const intervalId = setInterval(flashX, 30000);
+      // Store interval ID to clear it when going back
+      xButton.dataset.flashInterval = intervalId;
+
+      const label = document.getElementById("pregnancyLabel");
+      label.innerHTML = item.pregnancySafe ? '✅ Pregnancy Safe' : '🚫 Not Pregnancy Safe';
+      label.style.color = item.pregnancySafe ? '#00ff88' : '#ff4c4c';
+
+      document.querySelector(".details-page h2").textContent = item.name;
+      document.querySelector(".details-page img").src = item.image;
+      document.querySelector(".details-page img").alt = item.name;
+
+      document.querySelector(".nutrition").innerHTML = `
+        <tr><th>Nutrient</th><th>Amount</th></tr>
+        <tr><td>Calories</td><td>${item.calories} kcal</td></tr>
+        <tr><td>Protein</td><td>${item.protein}</td></tr>
+        <tr><td>Fat</td><td>${item.fat}</td></tr>
+        <tr><td>Carbohydrates</td><td>${item.carbs}</td></tr>
+      `;
+
+      document.getElementById("allergensInfo").textContent = item.allergens;
+      document.querySelector(".button-row button").setAttribute("onclick", `addToCart('${item.name}')`);
+      document.querySelector(".details-page #detailsDescription").textContent = item.fullDescription;
+    }
+
+
+    function goBack() {
+      const xButton = document.querySelector('#details button');
+      clearInterval(xButton.dataset.flashInterval);
+      document.getElementById("details").style.display = "none";
+      document.getElementById("menu").style.display = "flex";
+      document.getElementById("heroText").style.display = "block"; // SHOW hero text again
+    }
+
+    let cart = [];
+
+    function addToCart(itemName) {
+  const existingItem = cart.find(i => i.name === itemName);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({ name: itemName, quantity: 1 });
+  }
+  renderCart();
+}
+
+    function renderCart() {
+      const cartContainer = document.getElementById("cartItems");
+      cartContainer.innerHTML = cart.map((item, index) => `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+          <div>
+            <strong>${item.name}</strong><br>
+            <div style="display: flex; justify-content: flex-end; align-items: center;">
+              <span style="font-size: 0.8rem; color: #ccc; margin-right: 12px;">QUANTITY</span>
+              <input type="number" value="${item.quantity}" min="1"
+                style="width: 60px; background: rgba(0, 255, 255, 0.05); color: #a0faff; border: 1px solid #00ffff; border-radius: 6px; padding: 4px; text-align: center; font-weight: bold; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            </div>
+          </div>
+          <button onclick="removeFromCart(${index})" style="background: none; border: none; color: #ff4c4c; font-size: 1.2rem; cursor: pointer;">&times;</button>
+        </div>
+      `).join("");
+
+      // Update cart count display
+      const cartDisplay = document.getElementById("cartCountDisplay");
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartDisplay.innerText = `🛒 Floating Cart: ${totalItems} item${totalItems !== 1 ? 's' : ''}`;
+
+      // Trigger pulse animation
+      cartDisplay.classList.add("flash");
+      setTimeout(() => cartDisplay.classList.remove("flash"), 400);
+    }
+
+
+  function removeFromCart(index) {
+  const item = cart[index];
+  const slider = document.getElementById("removeSlider");
+  const maxValueDisplay = document.getElementById("sliderMaxValue");
+  slider.max = item.quantity;
+  slider.value = 1;
+    const sliderValue = document.getElementById("sliderValue");
+    sliderValue.textContent = slider.value;
+
+    // Live update as the user moves the slider
+    slider.addEventListener("input", () => {
+      sliderValue.textContent = slider.value;
+    });
+
+  maxValueDisplay.textContent = item.quantity;
+  slider.dataset.index = index;
+  document.getElementById("overlay").style.display = "flex";
+}
+
+function confirmRemove() {
+  const slider = document.getElementById("removeSlider");
+  const index = parseInt(slider.dataset.index);
+  const quantityToRemove = parseInt(slider.value);
+
+  // If 0, treat as cancel
+  if (quantityToRemove === 0) {
+    closeOverlay();
+    return;
+  }
+
+  if (cart[index].quantity > quantityToRemove) {
+    cart[index].quantity -= quantityToRemove;
+  } else {
+    cart.splice(index, 1);
+  }
+
+  closeOverlay();
+  renderCart();
+}
+
+function closeOverlay() {
+  document.getElementById("overlay").style.display = "none";
+}
+function setToMax() {
+  const slider = document.getElementById("removeSlider");
+  slider.value = slider.max;
+}
+
+</script>
+
+<div id="cartSidebar" style="position: fixed; 
+  top: 0; 
+  right: -350px; 
+  width: 300px; 
+  height: 100%; 
+  background: rgba(255, 255, 255, 0.06); 
+  backdrop-filter: blur(12px); 
+  box-shadow: -4px 0 15px rgba(0, 255, 255, 0.2); 
+  color: white; 
+  padding: 20px; 
+  transition: right 0.3s ease; 
+  overflow-y: auto; z-index: 9999;
+  cursor: none;"
+>
+
+  <div style="display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 16px;"
+  >
+
+    <h3 style="margin: 0; 
+      color: #a0faff;"
+    >Your Cart</h3>
+    <button onclick="toggleCart()" 
+      style="background: none; 
+      border: none; 
+      color: white; 
+      font-size: 1.5rem; 
+      cursor: pointer;"
+    >&times;</button>
+
+  </div>
+  <div id="cartItems"></div>
+</div>
+
+  <script>
+    // Starfield canvas
+    const starCanvas = document.getElementById("starfield");
+    const starCtx = starCanvas.getContext("2d");
+
+    const spaceBackground = new Image();
+    spaceBackground.src = 'Background Image.png'; // replace with any HD space image
+
+
+    let stars = [];
+    const STAR_COUNT = 800;
+    let centerX = window.innerWidth / 2;
+    let centerY = window.innerHeight / 2;
+
+    function resizeStarCanvas() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+    }
+    resizeStarCanvas();
+    window.addEventListener("resize", resizeStarCanvas);
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x: (Math.random() - 0.5) * starCanvas.width,
+          y: (Math.random() - 0.5) * starCanvas.height,
+          z: Math.random() * starCanvas.width,
+          o: Math.random() * 0.5 + 0.5,
+        });
+      }
+    }
+    createStars();
+
+    let angle = 0;
+    const radius = 40; // Wider loop = larger radius
+
+    let targetOffsetX = 0, targetOffsetY = 0;
+    let currentOffsetX = 0, currentOffsetY = 0;
+    let mouseX = 0, mouseY = 0;
+
+    document.addEventListener("mousemove", (e) => {
+      const rect = starCanvas.getBoundingClientRect();
+      mouseX = (e.clientX - rect.width / 2) / (rect.width / 2);  // range -1 to 1
+      mouseY = (e.clientY - rect.height / 2) / (rect.height / 2);
+    });
+
+    function drawStars() {
+      const extraMargin = 100; // amount the background image exceeds canvas edges
+  const bgWidth = starCanvas.width + extraMargin * 2;
+  const bgHeight = starCanvas.height + extraMargin * 2;
+
+  // Calculate normalized mouse offset (-1 to 1)
+  const distance = Math.sqrt(mouseX ** 2 + mouseY ** 2);
+  const easeSpeed = 0.01 + (0.04 * distance);
+
+  // Target offset: limit to the extra margin
+  targetOffsetX = -mouseX * extraMargin;
+  targetOffsetY = -mouseY * extraMargin;
+
+  // Smoothly ease to target
+  currentOffsetX += (targetOffsetX - currentOffsetX) * easeSpeed;
+  currentOffsetY += (targetOffsetY - currentOffsetY) * easeSpeed;
+
+  // Clear canvas and draw image with buffer
+  starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+  starCtx.drawImage(
+    spaceBackground,
+    -extraMargin + currentOffsetX,
+    -extraMargin + currentOffsetY,
+    bgWidth,
+    bgHeight
+  );
+
+
+      // Draw twinkling stars on top
+      for (let i = 0; i < stars.length; i++) {
+        const star = stars[i];
+        star.z -= 4;
+
+        if (star.z <= 0) {
+          star.x = (Math.random() - 0.5) * starCanvas.width;
+          star.y = (Math.random() - 0.5) * starCanvas.height;
+          star.z = starCanvas.width;
+        }
+
+        const k = 128 / star.z;
+        const px = star.x * k + centerX;
+        const py = star.y * k + centerY;
+
+        if (px >= 0 && px <= starCanvas.width && py >= 0 && py <= starCanvas.height) {
+          const size = (1 - star.z / starCanvas.width) * 3;
+          starCtx.beginPath();
+          starCtx.arc(px, py, size, 0, Math.PI * 2);
+          starCtx.fillStyle = `rgba(0, 255, 255, ${star.o})`;
+          starCtx.fill();
+        }
+      }
+
+      requestAnimationFrame(drawStars);
+    }
+
+
+
+
+
+
+
+    spaceBackground.onload = () => {
+      drawStars();
+    };
+
+    // Circuit Web canvas
+    const fxCanvas = document.getElementById("backgroundFX");
+    const fxCtx = fxCanvas.getContext("2d");
+    fxCanvas.style.position = "fixed";
+    fxCanvas.style.top = "0";
+    fxCanvas.style.left = "0";
+    fxCanvas.style.zIndex = "-2";
+    fxCanvas.style.width = "100%";
+    fxCanvas.style.height = "100%";
+
+    function resizeFXCanvas() {
+      fxCanvas.width = window.innerWidth;
+      fxCanvas.height = window.innerHeight;
+    }
+
+    const hexGrid = [];
+    const spacing = 40;
+
+    function createHexGrid() {
+      hexGrid.length = 0;
+      for (let y = 0; y < fxCanvas.height + spacing; y += spacing * Math.sqrt(3) / 2) {
+        for (let x = 0; x < fxCanvas.width + spacing; x += spacing) {
+          const offsetX = (Math.floor(y / (spacing * Math.sqrt(3)/2)) % 2) * (spacing / 2);
+          hexGrid.push({ x: x + offsetX, y: y });
+        }
+      }
+    }
+
+    function drawCircuitPulse() {
+      fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+      const time = Date.now() / 300;
+      for (let i = 0; i < hexGrid.length; i++) {
+        const p = hexGrid[i];
+        for (let j = 0; j < 6; j++) {
+          const angle = (Math.PI / 3) * j;
+          const x2 = p.x + spacing * Math.cos(angle);
+          const y2 = p.y + spacing * Math.sin(angle);
+          fxCtx.beginPath();
+          fxCtx.moveTo(p.x, p.y);
+          fxCtx.lineTo(x2, y2);
+          fxCtx.strokeStyle = "#00ffff";
+          fxCtx.globalAlpha = 0.05 + Math.sin(time + i * 0.2) * 0.3;
+          fxCtx.stroke();
+        }
+      }
+      requestAnimationFrame(drawCircuitPulse);
+    }
+
+    function resizeAll() {
+      resizeStarCanvas();
+      resizeFXCanvas();
+      createStars();
+      createHexGrid();
+    }
+
+    window.addEventListener("resize", resizeAll);
+    resizeAll();
+    drawCircuitPulse();
+
+
+  </script>
+
+  <div id="overlay" 
+    style="display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.7); 
+    z-index: 10000; 
+    justify-content: center; 
+    align-items: center;">
+    <div style="position: relative; 
+      background: rgba(255, 255, 255, 0.07); 
+      backdrop-filter: blur(14px); 
+      padding: 30px; 
+      border-radius: 20px; 
+      color: white; 
+      max-width: 320px; 
+      text-align: center; 
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      cursor: default;">
+
+      <button onclick="closeOverlay()" 
+        style="position: absolute; 
+        top: 10px; 
+        right: 12px; 
+        background: transparent; 
+        color: #ff4c4c; 
+        border: none; 
+        font-size: 1.8rem; 
+        cursor: pointer;"
+
+      >&times;</button>
+
+      <h3 style="
+        margin-bottom: 30px; 
+        font-size: 1.3rem; 
+        color: #a0faff;"
+      >Adjust Quantity</h3>
+
+        <div style="
+          display: flex; 
+          justify-content: 
+            space-between; 
+          align-items: center; 
+          margin-bottom: 10px; 
+          font-size: 0.95rem;"
+        >
+
+          <span id="sliderMinValue" 
+            style="color: #a0faff;"
+          >0</span>
+
+          <input id="removeSlider" 
+            type="range" min="0" max="1" value="1"
+            style="width: 70%; 
+            appearance: none; 
+            height: 6px; 
+            border-radius: 5px; 
+            background: rgba(0, 255, 255, 0.3); 
+            outline: none;"
+          >
+          <span id="sliderMaxValue" 
+            style="color: #a0faff;"
+          >1</span>
+
+        </div>
+
+        <div id="sliderValue" 
+          style="margin-top: 10px; 
+          margin-bottom: 30px; 
+          font-size: 1rem; 
+          color: #a0faff; 
+          font-weight: bold;"
+        >0</div>
+
+        <div style="
+          display: flex; 
+          justify-content: center; 
+          gap: 12px;"
+        >
+          <button onclick="confirmRemove()" 
+            style="background: rgba(0, 255, 255, 0.15); 
+            border: 1px solid #00ffff; 
+            color: white; 
+            padding: 8px 14px; 
+            border-radius: 8px; 
+            cursor: pointer;"
+          >Confirm</button>
+
+          <button onclick="setToMax()" 
+            style="background: rgba(0, 255, 255, 0.15); 
+            border: 1px solid #00ffff; 
+            color: white; 
+            padding: 8px 14px; 
+            border-radius: 8px; 
+            cursor: pointer;"
+          >Max</button>
+
+        </div>
+      </div>
+  </div>
+
+  <!-- Load your menu logic -->
+  <script src="menu.js"></script>
+
+  <!-- Call generateMenu AFTER it’s defined -->
+  <script>
+    document.addEventListener("DOMContentLoaded", generateMenu);
+  </script>
+
+  <script>
+    class TimeManager {
+      constructor() {
+        this.is24Hour = false;
+      }
+
+      toggleFormat() {
+        this.is24Hour = !this.is24Hour;
+        this.updateDisplay();
+      }
+
+      updateDisplay() {
+        const now = new Date();
+        const options = {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: !this.is24Hour
+        };
+        const timeElement = document.getElementById('statusTime');
+        if (timeElement) {
+          timeElement.textContent = now.toLocaleTimeString('en-US', options);
+        }
+      }
+    }
+
+    const timeManager = new TimeManager();
+    timeManager.updateDisplay();
+    setInterval(() => timeManager.updateDisplay(), 1000);
+
+    document.body.style.cursor = 'none';
+    const cursor = document.getElementById('customCursor');
+
+    // Move cursor with mouse
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Show cursor only on interactables
+    document.addEventListener('mouseover', (e) => {
+      const isInteractive = e.target.closest('button, a, .item, input, .cart');
+      cursor.style.opacity = isInteractive ? '1' : '0';
+    });
+  </script>
+
+  <script>
+    const particles = [];
+    const particleCount = 20; // Number of particles to create
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.width = '5px'; // Particle size
+      particle.style.height = '5px'; // Particle size
+      particle.style.transform = `translate(${x}px, ${y}px)`;
+      document.body.appendChild(particle);
+
+      // Animate the particle
+      setTimeout(() => {
+        particle.style.transform = `translate(${x + (Math.random() - 0.5) * 50}px, ${y + (Math.random() - 0.5) * 50}px)`;
+        particle.style.opacity = '0'; // Fade out
+      }, 10);
+
+      // Remove the particle after animation
+      setTimeout(() => {
+        particle.remove();
+      }, 500);
+    }
+    // Create particles on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const cursor = document.getElementById('particleCursor');
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+
+      // Create particles
+      for (let i = 0; i < particleCount; i++) {
+        createParticle(e.clientX, e.clientY);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

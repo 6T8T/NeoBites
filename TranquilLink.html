@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>NeoMessages | Personal Messaging</title>
+  <title>NeoMessages | Personal Messaging</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeoMessages | Personal Messaging</title>
+
+  <!-- ✅ Correct Placement -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+
+  <!-- Now your style block starts clean -->
+  <link rel="stylesheet" href="styles.css">
   <style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        overflow: hidden;
+    /* Any TranquilLink-specific overrides can go here */
         background: transparent;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         overflow: hidden; /* instead of overflow-x: hidden */
@@ -90,40 +85,143 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 6px 12px;
+        height: 44px;
+        padding: 0 24px;
         font-size: 0.8rem;
         color: #a0faff;
         background: rgba(255, 255, 255, 0.03);
         border-bottom: none;
-        font-family: 'Orbitron', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       }
-      
+
+      /* Regular signal bars with strength classes */
       .signal-bars span {
         display: inline-block;
-        width: 2px;
-        margin-right: 2px;
+        width: 3px;
+        margin-right: 1px;
         background: #a0faff;
-        opacity: 0.4;
+        border-radius: 1px;
+        transition: all 0.3s ease;
       }
-      .signal-bars span:nth-child(1) { height: 4px; }
-      .signal-bars span:nth-child(2) { height: 6px; }
-      .signal-bars span:nth-child(3) { height: 8px; }
-      .signal-bars span:nth-child(4) { height: 10px; opacity: 1; }
-      
+      .signal-bars span:nth-child(1) { height: 5px; }
+      .signal-bars span:nth-child(2) { height: 7px; }
+      .signal-bars span:nth-child(3) { height: 9px; }
+      .signal-bars span:nth-child(4) { height: 11px; }
+
+      /* Signal strength classes */
+      .signal-strength-0 span { opacity: 0.1 !important; }
+      .signal-strength-1 span:nth-child(1) { opacity: 1; }
+      .signal-strength-1 span:nth-child(n+2) { opacity: 0.1; }
+      .signal-strength-2 span:nth-child(-n+2) { opacity: 1; }
+      .signal-strength-2 span:nth-child(n+3) { opacity: 0.1; }
+      .signal-strength-3 span:nth-child(-n+3) { opacity: 1; }
+      .signal-strength-3 span:nth-child(n+4) { opacity: 0.1; }
+      .signal-strength-4 span { opacity: 1; }
+
+      /* Enhanced glow effects for signal strength */
+      .signal-strength-4 span {
+        box-shadow: 0 0 8px rgba(160, 250, 255, 0.6);
+      }
+
+      /* Radial signal design */
+      .signal-bars.radial span {
+        width: 3px;
+        height: 3px;
+        margin-right: 2px;
+        border-radius: 50%;
+      }
+      .signal-bars.radial span:nth-child(1) { height: 3px; opacity: 0.4; }
+      .signal-bars.radial span:nth-child(2) { height: 3px; opacity: 0.6; }
+      .signal-bars.radial span:nth-child(3) { height: 3px; opacity: 0.8; }
+      .signal-bars.radial span:nth-child(4) { height: 3px; opacity: 1; }
+
+      .wifi-icon {
+        position: relative;
+        width:16px;
+        height: 16px;
+        margin: 0 4px;
+        margin-top: -20px;
+        margin-left: 6px;
+        margin-right: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(2px);
+      }
+
+      .wifi-icon span {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) rotate(180deg);
+        transform-origin: bottom center;
+        display: block;
+        border: 1.5px solid #a0faff;
+        border-radius: 100px 100px 0 0;
+        transition: all 0.3s ease;
+        opacity: 0.1;
+      }
+
+      /* Arcs */
+      .wifi-icon span:nth-child(1) {
+        width: 14px;
+        height: 7px;
+      }
+      .wifi-icon span:nth-child(2) {
+        width: 10px;
+        height: 5px;
+      }
+      .wifi-icon span:nth-child(3) {
+        width: 6px;
+        height: 3px;
+      }
+
+      /* Dot */
+      .wifi-icon span.dot {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #a0faff;
+        border-radius: 50%;
+        box-shadow: 0 0 4px #a0faff;
+        opacity: 1;
+      }
+
+      .wifi-strength-0 span:not(.dot) { 
+        opacity: 0.1 !important; 
+        box-shadow: none;
+      }
+      .wifi-strength-1 span:nth-child(1) { 
+        opacity: 1;
+        box-shadow: 0 0 4px #a0faff;
+      }
+      .wifi-strength-2 span:nth-child(-n+2) { 
+        opacity: 1;
+        box-shadow: 0 0 8px #a0faff;
+      }
+      .wifi-strength-3 span:nth-child(-n+3) { 
+        opacity: 1;
+        box-shadow: 0 0 12px #a0faff;
+      }
+
+
       .battery-icon {
-        width: 24px;
-        height: 12px;
+        width: 15px;
+        height: 7px;
         border: 1px solid #a0faff;
         position: relative;
         border-radius: 2px;
+        margin-left: 0;
       }
       .battery-icon::after {
         content: '';
         position: absolute;
-        top: 3px;
-        right: -4px;
-        width: 2px;
-        height: 6px;
+        top: 2px;
+        right: -2px;
+        width: 1px;
+        height: 3px;
         background: #a0faff;
         border-radius: 1px;
       }
@@ -133,8 +231,33 @@
         background: #a0faff;
       }
       .status-center {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
         flex: 1;
         text-align: center;
+      }
+
+      .status-left {
+        min-width: 45px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+
+      .status-right {
+        display: flex;
+        align-items: center;
+        min-width: 45px;
+        justify-content: flex-end;
+        gap: 4px;
+      }
+
+      .signal-bars {
+        display: flex;
+        align-items: flex-end;
       }
 
       header {
@@ -213,16 +336,12 @@
       margin-top: 20px;
       display: flex;
       justify-content: center;
-      
-    }
-
-    .chat-wrapper.zoomed {
-      transform: scale(1.34);
+      transform: scale(1.42);
     }
 
 
     .chat-header {
-      padding: 14px 20px;
+      padding: 8px 20px;
       background: rgba(255, 255, 255, 0.04);
       border-bottom: 1px solid rgba(0, 255, 255, 0.12);
       box-shadow: inset 0 -1px 2px rgba(0, 255, 255, 0.05);
@@ -242,7 +361,7 @@
       overflow: hidden;
     }
 
-    
+
     .contact-name {
       color: #a0faff;
       font-weight: bold;
@@ -260,6 +379,44 @@
       padding: 20px;
       border-bottom: 1px solid rgba(0, 255, 255, 0.15);
       box-shadow: inset 0 -1px 3px rgba(0, 255, 255, 0.05);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 255, 255, 0.3) rgba(255, 255, 255, 0.05);
+    }
+
+    .message-container {
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .message-container::-webkit-scrollbar {
+      width: 6px;
+      background: transparent;
+    }
+
+    .message-container::-webkit-scrollbar-button,
+    .message-container::-webkit-scrollbar-track,
+    .message-container::-webkit-scrollbar-track-piece {
+      display: none;
+    }
+
+    .message-container::-webkit-scrollbar-thumb {
+      background: rgba(0, 255, 255, 0.2);
+      border-radius: 10px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .message-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 255, 255, 0.3);
+    }
+
+    .message-container::-webkit-scrollbar-thumb:active {
+      background: rgba(0, 255, 255, 0.4);
+    }
+
+    .message-container::-webkit-scrollbar-corner {
+      display: none;
     }
 
     .message {
@@ -272,7 +429,7 @@
       max-width: 75%;
       overflow-wrap: break-word;
       word-break: break-word;
-      white-space: normal;
+      white-space: pre-wrap;
       line-height: 1.4;
       background: #e5e5ea;
       color: black;
@@ -324,16 +481,16 @@
       background: rgba(240, 240, 240, 0.95);
       color: black;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-      font-size: 0.80rem;
+      font-size: 0.75rem;
       line-height: 1.4;
-    
+
       /* Key additions to handle no-space messages */
       overflow-wrap: break-word;
       word-break: break-word;
-      white-space: normal;
+      white-space: pre-wrap;
     }
 
-    
+
     .message.me .bubble::after {
       content: "";
       position: absolute;
@@ -360,10 +517,14 @@
     .input-container {
       display: flex;
       width: 100%;
-      max-width: 800px;        /* Matches .message-container */
+      max-width: 800px;
       align-items: center;
-      padding: 0 20px 20px;    /* Aligns with message-container padding */
+      padding: 12px 20px;
       box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
     }
 
     .timestamp {
@@ -382,24 +543,43 @@
 
   .input-container textarea {
       flex: 1;
+      min-height: 40px;
+      max-height: 120px;
       padding: 10px 14px;
-      border: none;
+      border: 1px solid rgba(0,255,255,0.15);
       border-radius: 10px 0 0 10px;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       color: #fff;
       outline: none;
-      border: 1px solid rgba(0,255,255,0.15);
-      backdrop-filter: blur(10px);
-      box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-                  inset -2px -2px 5px rgba(0, 255, 255, 0.05);
-
-     resize: none;
-     overflow-y: hidden;
-     line-height: 1.4;
+      resize: none;
+      overflow: hidden;
+      line-height: 1.4;
+      font-family: inherit;
+      font-size: 12px;
+      -webkit-appearance: none;
+      appearance: none;
+      box-sizing: border-box;
+      background: none;
+      background-color: transparent !important;
+      background-image: none;
+      margin: 0;
+      display: block;
+      width: 100%;
+      -webkit-background-clip: text;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      cursor: none;
     }
 
-.input-container button {
-      padding: 10px 18px;
+    .input-container textarea::-webkit-scrollbar {
+      display: none;
+    }
+
+  .input-container button {
+      height: 100%;
+      padding: 0 18px;
       border: none;
       border-radius: 0 10px 10px 0;
       background: rgba(255, 255, 255, 0.04);
@@ -426,6 +606,27 @@
       border-radius: 50%;
       background: rgba(0, 255, 255, 0.8);
   }
+
+  #customCursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(0, 255, 255, 0.8);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, border-color 0.2s;
+      mix-blend-mode: screen;
+  }
+
+  input:hover ~ #customCursor,
+  textarea:hover ~ #customCursor,
+  button:hover ~ #customCursor {
+      width: 40px;
+      height: 40px;
+      border-color: rgba(0, 255, 255, 1);
+  }
   </style>
  </head>
   <body>
@@ -438,33 +639,148 @@
     <div class="chat-wrapper">
       <div class="chat-window">
         <div class="status-bar">
-          <div class="status-left">
-            <div class="signal-bars">
-              <span></span><span></span><span></span><span></span>
+            <div class="status-left">
+              <span class="status-time" id="statusTime"></span>
+            </div>
+            <div class="status-center">
+            </div>
+            <div class="status-right">
+              <div class="signal-bars">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="wifi-icon wifi-strength-2">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="battery-icon">
+                <div class="battery-level"></div>
+              </div>
             </div>
           </div>
-          <div class="status-center">
-            <span class="status-time">12:45</span>
-          </div>
-          <div class="status-right">
-            <div class="battery-icon">
-              <div class="battery-level"></div>
-            </div>
-          </div>
-          </div>
-  
+
           <div class="chat-header">
-          <span class="contact-name">Neo • Kai</span>
-        </div>
+            <div class="profile-section">
+              <div class="profile-picture" onclick="toggleSettings()"></div>
+              <div class="settings-overlay">
+                <div class="settings-header">
+                  <button class="done-button" onclick="toggleSettings()">Done</button>
+                </div>
+                <div class="settings-content">
+                  <!-- Add settings content here -->
+                </div>
+              </div>
+              <div class="contact-info">
+                <span class="contact-name">Neo • Kai</span>
+                <span class="contact-status">ONLINE</span>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .profile-section {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              width: 100%;
+              padding: 8px 0;
+              position: relative;
+            }
+
+            .profile-picture {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background: url('https://avatars.githubusercontent.com/u/583231?v=4') center/cover;
+              border: 1.5px solid rgba(160, 250, 255, 0.4);
+              margin-top: -24px;
+              margin-bottom: 18px;
+              position: relative;
+              cursor: pointer;
+              transition: transform 0.2s ease;
+            }
+
+            .profile-picture:hover {
+              transform: scale(1.1);
+            }
+
+            .settings-overlay {
+              display: none;
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              height: calc(100% - 64px); /* Adjust to match blurred area */
+              background: rgba(255, 255, 255, 0.06);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              z-index: 1000;
+              border-radius: 24px;
+              padding: 16px;
+            }
+
+            .settings-overlay.active {
+              display: block;
+            }
+
+            .settings-header {
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              margin-bottom: 16px;
+            }
+
+            .done-button {
+              color: #a0faff;
+              background: none;
+              border: none;
+              font-size: 14px;
+              cursor: pointer;
+              padding: 6px 12px;
+              border-radius: 6px;
+              transition: background 0.2s ease;
+            }
+
+            .done-button:hover {
+              background: rgba(160, 250, 255, 0.1);
+            }
+
+            .contact-info {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              width: 100%;
+              margin-top: -12px;
+              position: relative;
+            }
+
+            .contact-name {
+              font-size: 0.55rem;
+              line-height: 1;
+              margin: 0;
+              text-align: center;
+              width: 100%;
+              margin-bottom: 2px;
+            }
+
+            .contact-status {
+              font-size: 0.55rem;
+              color: #00ff88;
+              opacity: 0.8;
+              margin-top: 0;
+              text-align: center;
+              width: 100%;
+            }
+          </style>
           <section class="message-container" id="messageContainer"></section>
           <div class="input-container">
-            <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
+            <textarea id="messageInput" rows="1" placeholder="Type your message..."></textarea>
             <button onclick="sendMessage()">Send</button>
           </div>
       </div>
         </div>  
 
-    
+
     <div class="custom-cursor" id="customCursor"></div>
     <div id="particleCursor" class="particle-cursor"></div>
     <div id="heroText" class="hero">
@@ -472,28 +788,102 @@
     </div>
 
   <script>
+    class TimeManager {
+      constructor() {
+        this.is24Hour = false;
+      }
+
+      toggleFormat() {
+        this.is24Hour = !this.is24Hour;
+        this.updateDisplay();
+      }
+
+      updateDisplay() {
+        const now = new Date();
+        const options = {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: !this.is24Hour,
+          timeZone: 'America/New_York'
+        };
+        const timeElement = document.getElementById('statusTime');
+        if (timeElement) {
+          timeElement.textContent = now.toLocaleTimeString('en-US', options);
+        }
+      }
+    }
+
+    const timeManager = new TimeManager();
+
+    // Update time every second
+    timeManager.updateDisplay();
+    setInterval(() => timeManager.updateDisplay(), 1000);
+
+    // Double click on time to toggle format
+    document.getElementById('statusTime').addEventListener('dblclick', () => {
+      timeManager.toggleFormat();
+    });
+
+    document.body.style.cursor = 'none';
+    const cursor = document.getElementById('particleCursor');
+
+    document.addEventListener('mousemove', (e) => {
+      requestAnimationFrame(() => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+    });
     const messageContainer = document.getElementById('messageContainer');
     const messageInput = document.getElementById('messageInput');
 
     messageInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && e.ctrlKey) {
-        e.preventDefault();
-        sendMessage();
+      if (e.key === 'Enter') {
+        if (e.shiftKey) {
+          // Insert new line when Shift+Enter is pressed
+          const start = this.selectionStart;
+          const end = this.selectionEnd;
+          this.value = this.value.substring(0, start) + '\n' + this.value.substring(end);
+          this.selectionStart = this.selectionEnd = start + 1;
+          e.preventDefault();
+          // Use requestAnimationFrame to ensure the new line is rendered before scrolling
+          requestAnimationFrame(() => {
+            const lineHeight = parseInt(getComputedStyle(this).lineHeight);
+            const lines = this.value.substr(0, this.selectionStart).split('\n');
+            const currentLineNumber = lines.length - 1;
+            this.scrollTop = currentLineNumber * lineHeight;
+          });
+        } else {
+          // Send message when Enter is pressed
+          e.preventDefault();
+          sendMessage();
+        }
       }
     });
+
+    messageInput.addEventListener('input', function() {
+      // Scroll to cursor position on any input
+      const lineHeight = parseInt(getComputedStyle(this).lineHeight);
+      const lines = this.value.substr(0, this.selectionStart).split('\n');
+      const currentLineNumber = lines.length - 1;
+      this.scrollTop = currentLineNumber * lineHeight;
+    });
+
+    function toggleSettings() {
+      const overlay = document.querySelector('.settings-overlay');
+      overlay.classList.toggle('active');
+    }
 
     function sendMessage() {
       const text = messageInput.value.trim();
       if (text) {
         const msgWrapper = document.createElement('div'); // container for bubble + timestamp
 
-        const msg = document.createElement('div');
-        msg.className = 'message me';
-        
+        const msg = document.createElement('div');msg.className = 'message me';
+
         const bubble = document.createElement('div');
         bubble.className = 'bubble';
         bubble.textContent = text;
-        
+
         msg.appendChild(bubble);
 
 
@@ -523,7 +913,7 @@
 
 
           let stars = [];
-          const STAR_COUNT = 800;
+          const STAR_COUNT = 400;
           let centerX = window.innerWidth / 2;
           let centerY = window.innerHeight / 2;
 
@@ -591,7 +981,7 @@
         // Draw twinkling stars on top
         for (let i = 0; i < stars.length; i++) {
           const star = stars[i];
-          star.z -= 4;
+          star.z -= 2;
 
           if (star.z <= 0) {
             star.x = (Math.random() - 0.5) * starCanvas.width;
@@ -641,7 +1031,7 @@
       }
 
       const hexGrid = [];
-      const spacing = 40;
+      const spacing = 60;
 
       function createHexGrid() {
         hexGrid.length = 0;
@@ -684,14 +1074,6 @@
         resizeAll();
         drawCircuitPulse();
 
-    let hasZoomed = false;
-    document.querySelector('.chat-wrapper').addEventListener('click', function () {
-      if (!hasZoomed) {
-        this.classList.add('zoomed');
-        hasZoomed = true;
-      }
-    });
-
-  </script>
+    </script>
 </body>
 </html>

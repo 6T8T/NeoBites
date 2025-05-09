@@ -1,0 +1,96 @@
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes flashNeon {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.8);
+  }
+}
+
+.app-container {
+  width: 390px;
+  height: calc(100vh - 60px);
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.custom-cursor {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.particle-cursor {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 255, 255, 0.8);
+  pointer-events: none;
+  transition: transform 0.1s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  z-index: 10000;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+/* All other CSS styles from TranquilLink.html */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 0 24px;
+  font-size: 0.8rem;
+  color: #a0faff;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: none;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Continue with ALL remaining CSS from TranquilLink.html */
+/* This includes all the signal bars, wifi icon, battery icon, etc. */
+/* Message container, input styles, etc. */
+
+/* Also include ALL CSS from NeoBites.html that isn't duplicated */
+/* Menu styles, item styles, etc. */
+
